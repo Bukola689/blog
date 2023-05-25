@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 
 class GetPostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $allPosts = Post::orderBy('id', 'desc')->get();
+        $allPosts = Post::with('category')->orderBy('id', 'desc')->paginate(5);
 
         return response()->json([
             'success' => true,

@@ -12,14 +12,24 @@ class AdminCommentController extends Controller
     {
         $comments = Comment::orderBy('id', 'desc')->get();
 
+        if($comments->isEmpty()) {
+            return response()->json('Comment are Empty');
+        }
+
         return response()->json([
             'status' => true,
             'comments' => $comments
         ]);
     }
 
-    public function destroy(Comment $comment)
+    public function destroy($id)
     {
+        $comment = Comment::find($id);
+
+        if(!$comment) {
+            return response()->json('comment not found');
+        }
+
         $comment = $comment->delete();
 
         if($comment) {

@@ -30,6 +30,8 @@ class LoginController extends Controller
             'token'=>$token,
         ];
 
+        cache()->forget('users:all');
+
         return response($response, 200);
       }
     }

@@ -19,6 +19,10 @@ class CategoryController extends Controller
     {
         $categories = Category::orderBy('id', 'desc')->get();
 
+        if($categories->isEmpty()) {
+            return response()->json('Category are Empty');
+        }
+
         return CategoryResource::collection($categories);
     }
 
@@ -58,8 +62,15 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show($id)
     {
+        $category = Category::find($id);
+
+        if(!$category) {
+            return response()->json('Category not found');
+        }
+
+
         return new CategoryResource($category);
     }
 
@@ -81,8 +92,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(UpdateCategoryRequest $request, $id)
     {
+        $category = Category::find($id);
+
+        if(!$category) {
+            return response()->json('Category not found');
+        }
+
         $category->name = $request->input('name');
         $category->update();
 
@@ -95,8 +112,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
+        $category = Category::find($id);
+
+        if(!$category) {
+            return response()->json('Category not found');
+        }
+
         $category = $category->delete();
 
         // return new CategoryResource($category);

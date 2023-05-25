@@ -10,13 +10,25 @@ use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
-    public function index(Setting $setting)
+    public function index($id)
     {
+        $setting = Setting::find($id);
+
+        if(!$setting) {
+            return response()->json('Setting not found');
+        }
+
         return new SettingResource($setting);
     }
 
-    public function update(Request $request,Setting $setting)
+    public function update(Request $request, $id)
     {
+        $setting = Setting::find($id);
+
+        if(!$setting) {
+            return response()->json('Category not found');
+        }
+
         $request->validate([
             'header_logo' => 'required',
             'footer_logo' => 'required',

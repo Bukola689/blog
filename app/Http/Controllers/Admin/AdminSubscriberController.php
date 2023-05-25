@@ -10,7 +10,11 @@ class AdminSubscriberController extends Controller
 {
     public function index()
     {
-        $subscribers = Subscriber::all();
+        $subscribers = Subscriber::orderBy('id', 'asc')->get();
+
+        if($subscribers->isEmpty()) {
+            return response()->json('Contact are Empty');
+        }
 
         return response()->json([
             'status' => true,
@@ -18,8 +22,14 @@ class AdminSubscriberController extends Controller
         ]);
     }
 
-    public function destroy(Subscriber $subscriber)
+    public function destroy($id)
     {
+        $subscriber = Subscriber::find($id);
+
+        if(!$subscriber) {
+            return response()->json('subscriber not found');
+        }
+
         $subscriber = $subscriber->delete();
 
         if($subscriber) {

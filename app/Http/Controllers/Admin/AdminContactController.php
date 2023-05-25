@@ -12,14 +12,24 @@ class AdminContactController extends Controller
     {
         $contacts = Contact::orderBy('id', 'desc')->get();
 
+        if($contacts->isEmpty()) {
+            return response()->json('Contact are Empty');
+        }
+
         return response()->json([
             'status' => true,
             'contacts' => $contacts
         ]);
     }
 
-    public function destroy(Contact $contact)
+    public function destroy($id)
     {
+        $contact = Contact::find($id);
+
+        if(!$contact) {
+            return response()->json('contact not found');
+        }
+
         $contact = $contact->delete();
 
         if($contact) {
